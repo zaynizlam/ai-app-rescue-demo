@@ -62,7 +62,6 @@ export default function TaskList({ userId }: { userId: string }) {
       </ul>
       {plan === "free" && (
         <form action="/api/stripe/checkout" method="POST" style={{ marginTop: 16 }}>
-          <input type="hidden" name="userId" value={userId} />
           <button className="secondary" type="submit">Upgrade to Pro</button>
         </form>
       )}
