@@ -2,7 +2,7 @@
 
 **Demo project.** TaskFlow is a small task-list SaaS (Next.js + Supabase + Stripe) written the way AI app builders such as Lovable, Bolt and Cursor often produce it: it looks finished, but it won't deploy, logs users out, and leaks data. This repo shows how I take an app like that to production.
 
-- `broken` tag: the app as generated
+- `broken` branch: the app as generated
 - `main`: the fixed app, one commit per fix
 
 ```bash
