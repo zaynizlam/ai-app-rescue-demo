@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import TaskList from "./TaskList";
 
 export default async function DashboardPage() {
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   if (!data.user) redirect("/login");
 

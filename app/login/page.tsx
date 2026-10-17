@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
+
+// Create the client only in the browser (event handlers / effects), never during server rendering.
+// createBrowserClient returns a cached singleton, so calling it repeatedly is cheap.
+const supabase = () => createClient();
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,7 +16,7 @@ export default function LoginPage() {
 
   // If we already have a session, go straight to the dashboard
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    supabase().auth.getSession().then(({ data }) => {
       if (data.session) router.push("/dashboard");
     });
   }, [router]);
@@ -20,9 +24,10 @@ export default function LoginPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase().auth.signInWithPassword({ email, password });
     if (error) return setError(error.message);
     router.push("/dashboard");
+    router.refresh(); // re-render server components with the new session cookie
   }
 
   return (
