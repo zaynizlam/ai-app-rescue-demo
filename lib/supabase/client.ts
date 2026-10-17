@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
-// One client for the whole app (browser and server).
+// Browser-safe client: uses the public anon key, so RLS policies apply.
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
