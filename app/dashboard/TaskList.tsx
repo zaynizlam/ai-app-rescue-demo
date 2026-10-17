@@ -15,9 +15,20 @@ export default function TaskList({ userId }: { userId: string }) {
   const [title, setTitle] = useState("");
 
   useEffect(() => {
-    supabase().from("tasks").select("*").order("created_at").then(({ data }) => setTasks(data ?? []));
-    supabase().from("profiles").select("plan").single().then(({ data }) => setPlan(data?.plan ?? "free"));
-  }, []);
+    // RLS already limits rows to this user; the filters keep queries explicit and indexed.
+    supabase()
+      .from("tasks")
+      .select("id, title, done")
+      .eq("user_id", userId)
+      .order("created_at")
+      .then(({ data }) => setTasks(data ?? []));
+    supabase()
+      .from("profiles")
+      .select("plan")
+      .eq("id", userId)
+      .single()
+      .then(({ data }) => setPlan(data?.plan ?? "free"));
+  }, [userId]);
 
   async function addTask(e: React.FormEvent) {
     e.preventDefault();
